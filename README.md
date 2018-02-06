@@ -14,6 +14,10 @@ This provider plugin is maintained by [Sedicii](https://sedicii.com/).
 
 ### Installation
 
+```bash
+curl https://raw.githubusercontent.com/Sedicii/terraform-provider-handlebars/master/scripts/install-handlebars-tf-pluging.sh | bash
+```
+
 ### Usage
 
 ```
@@ -21,14 +25,13 @@ provider "handlebars_template" {
   version = "~> 0.1.0"
 }
 
-
-
-
-
-
+data "handlebars_template" "test" {
+  template = "${file("${path.module}/templates/test.conf.hbs")}"
+  json_context = "${jsonencode("${var.context}")}"
+}
 ```
 
-
+For a more detailed example look at the example directory
 
 ### Building The Provider
 
