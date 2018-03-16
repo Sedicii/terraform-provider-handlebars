@@ -21,7 +21,7 @@ curl https://raw.githubusercontent.com/Sedicii/terraform-provider-handlebars/mas
 ### Usage
 
 ```
-provider "handlebars_template" {
+provider "handlebars" {
   version = "~> 0.1.0"
 }
 
