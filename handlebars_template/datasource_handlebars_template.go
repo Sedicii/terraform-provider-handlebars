@@ -6,9 +6,19 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/aymerick/raymond"
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/lumasepa/raymond"
 )
+
+type NullEscaper struct{}
+
+func (self NullEscaper) Escape(s string) string {
+	return s
+}
+
+var templateOpts = raymond.TemplateOptions{
+	Escaper: NullEscaper{},
+}
 
 func handlebarsTemplate() *schema.Resource {
 	return &schema.Resource{
@@ -53,7 +63,7 @@ func renderHandlebarsTemplate(template string, jsonContextStr string) (string, e
 	jsonContext := make(map[string]interface{})
 	json.Unmarshal([]byte(jsonContextStr), &jsonContext)
 
-	rendered, err := raymond.Render(template, jsonContext)
+	rendered, err := raymond.Render(template, jsonContext, &templateOpts)
 
 	if err != nil {
 		return "", templateRenderError(

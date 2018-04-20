@@ -22,7 +22,7 @@ curl https://raw.githubusercontent.com/Sedicii/terraform-provider-handlebars/mas
 
 ```
 provider "handlebars" {
-  version = "~> 0.1.0"
+  version = "~> 0.2.0"
 }
 
 data "handlebars_template" "test" {
