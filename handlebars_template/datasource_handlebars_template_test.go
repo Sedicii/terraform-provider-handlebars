@@ -20,18 +20,19 @@ func TestTemplateRendering(t *testing.T) {
 		want     string
 	}{
 		{`{}`, `ABC`, `ABC`},
-		{`{\"a\": \"foo\"}`, `{{a}}`, `foo`},
-		{`{\"a\": true}`, `{{a}}`, `true`},
-		{`{\"a\": false}`, `{{a}}`, `false`},
-		{`{\"a\": 43}`, `{{a}}`, `43`},
-		{`{\"a\": 43.1}`, `{{a}}`, `43.1`},
-		{`{\"a\": {\"a\": 1, \"b\": 2}}`, `{{#each a}}{{@key}} = {{this}} {{/each}}`, `a = 1 b = 2 `},
-		{`{\"a\": [\"h\", \"i\"]}`, `{{#each a}}{{this}}{{/each}}`, `hi`},
+		{`{a = "foo"}`, `{{a}}`, `foo`},
+		{`{a = true}`, `{{a}}`, `true`},
+		{`{a = false}`, `{{a}}`, `false`},
+		{`{a = 43}`, `{{a}}`, `43`},
+		{`{a = 43.1}`, `{{a}}`, `43.1`},
+		{`{a = {a = 1, b = 2}}`, `{{#each a}}{{@key}} = {{this}} {{/each}}`, `a = 1 b = 2 `},
+		{`{a = ["h", "i"]}`, `{{#each a}}{{this}}{{/each}}`, `hi`},
 		{`{}`, `{{foo}}`, ``},
 		{`{}`, `/`, `/`},
 	}
 
-	for _, tt := range cases {
+	for idx, tt := range cases {
+		fmt.Printf("Running test %d: \n vars: %+v \n template: \n %s", idx,tt.vars, tt.template)
 		r.UnitTest(t, r.TestCase{
 			Providers: testProviders,
 			Steps: []r.TestStep{
@@ -54,7 +55,7 @@ func testTemplateConfig(template, vars string) string {
 	return fmt.Sprintf(`
 		data "handlebars_template" "t0" {
 			template = "%s"
-			json_context = "%s"
+			context = %s
 		}
 		output "rendered" {
 				value = "${data.handlebars_template.t0.rendered}"

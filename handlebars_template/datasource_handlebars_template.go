@@ -3,9 +3,7 @@ package handlebars_template
 import (
 	"crypto/sha256"
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
-
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/lumasepa/raymond"
 	"strconv"
@@ -31,10 +29,10 @@ func handlebarsTemplate() *schema.Resource {
 				Required:    true,
 				Description: "Contents of the template",
 			},
-			"json_context": &schema.Schema{
-				Type:        schema.TypeString,
+			"context": &schema.Schema{
+				Type:        schema.TypeMap,
 				Required:    true,
-				Description: "variables to substitute as a json",
+				Description: "variables to substitute",
 			},
 			"rendered": &schema.Schema{
 				Type:        schema.TypeString,
@@ -47,9 +45,10 @@ func handlebarsTemplate() *schema.Resource {
 
 func dataSourceRenderHandlebarsTemplate(d *schema.ResourceData, meta interface{}) error {
 	template := d.Get("template").(string)
-	jsonContextStr := d.Get("json_context").(string)
+	context := d.Get("context").(map[string]interface{})
+	fmt.Sprintf("%+v", context)
 
-	rendered, err := renderHandlebarsTemplate(template, jsonContextStr)
+	rendered, err := renderHandlebarsTemplate(template, context)
 	if err != nil {
 		return err
 	}
@@ -60,11 +59,17 @@ func dataSourceRenderHandlebarsTemplate(d *schema.ResourceData, meta interface{}
 
 type templateRenderError error
 
-func renderHandlebarsTemplate(template string, jsonContextStr string) (string, error) {
-	jsonContext := make(map[string]interface{})
-	json.Unmarshal([]byte(jsonContextStr), &jsonContext)
-
-	rendered, err := raymond.Render(template, jsonContext, &templateOpts)
+func renderHandlebarsTemplate(template string, context map[string]interface{}) (string, error) {
+	//x, err := json.Marshal(context)
+	//if err != nil {
+	//	return "", err
+	//}
+	//jsonContext := make(map[string]interface{})
+	//err = json.Unmarshal(x, &jsonContext)
+	//if err != nil {
+	//	return "", err
+	//}
+	rendered, err := raymond.Render(template, context, &templateOpts)
 
 	if err != nil {
 		return "", templateRenderError(

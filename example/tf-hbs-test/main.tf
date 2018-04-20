@@ -24,7 +24,19 @@ variable "context" {
 
 data "handlebars_template" "test" {
   template = "${file("${path.module}/templates/test.conf.hbs")}"
-  json_context = "${jsonencode("${var.context}")}"
+  context = {
+    name = "test_name"
+    ips = ["10.0.0.1","10.1.0.1","10.2.0.1"]
+    boolean_true = true
+    boolean_false = false
+    number = 1
+    float = 1.1
+    map = {
+      k1 = 1
+      k2 = 2
+      k3 = "test"
+    }
+  }
 }
 
 output "context" {
