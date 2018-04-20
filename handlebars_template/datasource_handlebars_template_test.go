@@ -6,6 +6,7 @@ import (
 
 	r "github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
+	"github.com/lumasepa/raymond"
 )
 
 var testProviders = map[string]terraform.ResourceProvider{
@@ -58,4 +59,34 @@ func testTemplateConfig(template, vars string) string {
 		output "rendered" {
 				value = "${data.handlebars_template.t0.rendered}"
 		}`, template, vars)
+}
+
+func TestTfIf(t *testing.T) {
+	source := `{{#if yep}}YEP !{{else}}NOP !{{/if}}`
+
+	raymondTfExtraHelpers()
+
+	testCases := []struct {
+		in          string
+		expectedOut string
+	}{
+		{"0", "NOP !"},
+		{"1", "YEP !"},
+		{"10", "YEP !"},
+		{"text", "YEP !"},
+		{"", "NOP !"},
+	}
+
+	for _, testCase := range testCases {
+		ctx := map[string]interface{}{"yep": testCase.in}
+		res, err := raymond.Render(source, ctx, nil)
+
+		if err != nil {
+			t.Error("tfif error", err)
+		}
+
+		if res != testCase.expectedOut {
+			t.Errorf("Test error in case %s \n Expected: %s \n Got: %s", testCase.in, testCase.expectedOut, res)
+		}
+	}
 }

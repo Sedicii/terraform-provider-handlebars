@@ -10,13 +10,40 @@ List of ips:
     ip: {{this}}
 {{/each}}
 
+{{#if boolean_true }}
+    this is true !!
+{{/if}}
+
 {{#equal boolean_true "1"}}
     this is true !!
 {{/equal}}
 
+{{#if boolean_false }}
+    this is false !!
+{{/if}}
+
 {{#equal boolean_false "0"}}
     this is false !!
 {{/equal}}
+
+
+
+{{#if "" }}
+    there is no text this should not be displayed
+{{/if}}
+
+{{#if "some text" }}
+    this should be displayed
+{{/if}}
+
+
+{{#if "0" }}
+    this is 0 this should not be displayed
+{{/if}}
+
+{{#if "10" }}
+    this should be displayed
+{{/if}}
 
 
 this is a map :

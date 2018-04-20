@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 OS=$(uname | tr '[:upper:]' '[:lower:]')
-VERSION="v0.2.0"
+if [ -z ${VERSION} ]
+then
+    VERSION="v0.2.1"
+fi
 PROVIDER_DOWNLOAD_URL="https://github.com/Sedicii/terraform-provider-handlebars/releases/download/${VERSION}/terraform-provider-handlebars_${OS}-amd64_${VERSION}"
 TF_PLUGINS_PATH="${HOME}/.terraform.d/plugins/${OS}_amd64/"
 

@@ -3,10 +3,10 @@ GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 
 default: build
 
-build: fmtcheck
+build: fmt
 	CGO_ENABLED=0 go install
 
-test: fmtcheck
+test: fmt
 	go test -i $(TEST) || exit 1
 	echo $(TEST) | \
 		xargs -t -n4 go test $(TESTARGS) -timeout=30s -parallel=4

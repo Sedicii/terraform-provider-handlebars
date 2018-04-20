@@ -259,8 +259,8 @@
 [[projects]]
   name = "github.com/lumasepa/raymond"
   packages = ["."]
-  revision = "fa635ea5c20ecea96abf536c94dbd8a8c03b3381"
-  version = "v3.0.0"
+  revision = "8df01df863faa93c8df1490adb882fcd54fe0299"
+  version = "v3.0.1"
 
 [[projects]]
   name = "github.com/mattn/go-colorable"
@@ -471,6 +471,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f9046fcc0d8d6db4a6f70491aa2845f64c69cd81697b3a17f7ecde946df7a14d"
+  inputs-digest = "15dd187a17567538e4f7d07c1c36308efd43bc7f38b75370ca4bcdca5d3ddd7d"
   solver-name = "gps-cdcl"
   solver-version = 1

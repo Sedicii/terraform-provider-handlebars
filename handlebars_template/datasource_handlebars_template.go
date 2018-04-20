@@ -8,6 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/lumasepa/raymond"
+	"strconv"
 )
 
 type NullEscaper struct{}
@@ -77,4 +78,35 @@ func renderHandlebarsTemplate(template string, jsonContextStr string) (string, e
 func hash(s string) string {
 	sha := sha256.Sum256([]byte(s))
 	return hex.EncodeToString(sha[:])
+}
+
+func raymondTfExtraHelpers() {
+	// If for terraform evals "1" to true and others to false
+	raymond.RemoveHelper("if")
+
+	coerceExpr := func(expr string) bool {
+		i, err := strconv.Atoi(expr)
+		if err == nil { // is a number eval as x > 0
+			if i > 0 {
+				return true
+			} else {
+				return false
+			}
+		} else if len(expr) > 0 { // is a string eval as notEmpty(str)
+			return true
+		}
+		return false
+	}
+
+	raymond.RegisterHelper("if", func(conditional string, options *raymond.Options) string {
+		if coerceExpr(conditional) {
+			return options.Fn()
+		}
+		return options.Inverse()
+	})
+
+}
+
+func init() {
+	raymondTfExtraHelpers()
 }

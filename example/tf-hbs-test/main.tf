@@ -1,7 +1,7 @@
 
 
 provider "handlebars" {
-  version = "~> 0.2.0"
+  version = "~> 0.2.1"
 }
 
 
@@ -12,7 +12,7 @@ variable "context" {
     boolean_true = true
     boolean_false = false
     number = 1
-    float = 1.0
+    float = 1.1
     map = {
       k1 = 1
       k2 = 2
@@ -25,6 +25,10 @@ variable "context" {
 data "handlebars_template" "test" {
   template = "${file("${path.module}/templates/test.conf.hbs")}"
   json_context = "${jsonencode("${var.context}")}"
+}
+
+output "context" {
+  value = "${jsonencode("${var.context}")}"
 }
 
 output "test_rendered" {

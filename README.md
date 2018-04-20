@@ -31,7 +31,23 @@ data "handlebars_template" "test" {
 }
 ```
 
-For a more detailed example look at the example directory
+**For a more detailed example look at the example directory !!**
+
+### Disclaimer on Handlebars behaviour
+
+The handlerbars engine have been modified to play nicely with Terraform.
+
+The differences with a standard engine are :
+
+* The double moustache interpolation `{{var}}` does not scapes variables to html so are the same as the triple moustache `{{{var}}}`
+* The if block does some type coercions related on how terraform `jsonencode()` function works (execute the example to see the behaviour)
+    * if evaluates `"0"` as false (`"0"` is terraform false)
+    * if evaluates `"1"` as true  (`"1"` is terraform true)
+    * if evaluates positive numbers `"2"` as true
+    * if evaluates negative numbers `"-2"` as false
+    * if evaluates empty strings `""` as false
+    * if evaluates not empty strings `"text"` as true
+
 
 ### Building The Provider
 
